@@ -90,13 +90,13 @@ func (ba *BlockAdder) AddMany(ctx context.Context, nodes []ipld.Node) error {
 func ipldNodeToNodeWithMeta(n ipld.Node) *api.NodeWithMeta {
 	size, err := n.Size()
 	if err != nil {
-		logger.Warning(err)
+		logger.Warn(err)
 	}
 
 	format, ok := cid.CodecToStr[n.Cid().Type()]
 	if !ok {
 		format = ""
-		logger.Warning("unsupported cid type, treating as v0")
+		logger.Warn("unsupported cid type, treating as v0")
 	}
 	if n.Cid().Prefix().Version == 0 {
 		format = "v0"

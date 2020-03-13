@@ -15,7 +15,6 @@ import (
 	cid "github.com/ipfs/go-cid"
 	host "github.com/libp2p/go-libp2p-core/host"
 	peer "github.com/libp2p/go-libp2p-core/peer"
-	dht "github.com/libp2p/go-libp2p-kad-dht"
 	ma "github.com/multiformats/go-multiaddr"
 )
 
@@ -46,7 +45,7 @@ func peerManagerClusters(t *testing.T) ([]*Cluster, []*test.IpfsMock, host.Host)
 	cfg.ListenAddr = []ma.Multiaddr{listen}
 	cfg.Secret = testingClusterSecret
 
-	h, _, idht := createHost(t, ident.PrivateKey, testingClusterSecret, cfg.ListenAddr)
+	h, _, _ := createHost(t, ident.PrivateKey, testingClusterSecret, cfg.ListenAddr)
 
 	// Connect host to all peers. This will allow that they can discover
 	// each others via DHT.
@@ -62,14 +61,6 @@ func peerManagerClusters(t *testing.T) ([]*Cluster, []*test.IpfsMock, host.Host)
 			t.Fatal(err)
 		}
 	}
-	ctx := context.Background()
-	dhtCfg := dht.BootstrapConfig{
-		Queries: 1,
-		Period:  600 * time.Millisecond,
-		Timeout: 300 * time.Millisecond,
-	}
-
-	idht.BootstrapWithConfig(ctx, dhtCfg)
 	return cls, mocks, h
 }
 
